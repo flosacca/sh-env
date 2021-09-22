@@ -1,5 +1,4 @@
-prepend_path "$HOME/.rbenv/bin"
-prepend_path "$HOME/.rbenv/shims"
+[ -x "$(command -v rbenv)" ] || return
 
 . "$HOME/.rbenv/completions/rbenv.bash"
 

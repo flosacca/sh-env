@@ -3,7 +3,7 @@ if [[ $- != *i* ]]; then
 fi
 
 for d in $(shopt -q login_shell && echo profile.d) bashrc.d; do
-  for p in "$HOME/.local/etc/bash/$d/"*.sh; do
+  for p in "$HOME/.local/etc/bash/$d"{/*,}/*.sh; do
     [ -f "$p" ] && . "$p"
   done
   unset p
