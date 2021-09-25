@@ -3,7 +3,7 @@
 . "$HOME/.rbenv/completions/rbenv.bash"
 
 rbenv() {
-  case "${1-}" in
+  case ${1-} in
   shell|rehash)
     eval "$(command rbenv "sh-$1" "${@:2}")"
     ;;

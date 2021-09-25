@@ -1,6 +1,4 @@
-if [[ $- != *i* ]]; then
-  return
-fi
+[[ $- = *i* ]] || return
 
 for d in $(shopt -q login_shell && echo profile.d) bashrc.d; do
   for p in "$HOME/.local/etc/bash/$d"{/*,}/*.sh; do
@@ -15,3 +13,5 @@ shopt -s globstar
 export RUBYLIB=/d/dev/repo/ruby-ext
 
 alias s=/d/dev/repo/ssh-helper/ssh.sh
+
+alias inspect='ruby -e "p ARGV"'
