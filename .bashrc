@@ -1,16 +1,21 @@
-[[ $- = *i* ]] || return
-
-for d in $(shopt -q login_shell && echo profile.d) bashrc.d; do
-  for p in "$HOME/.local/etc/bash/$d"{/*,}/*.sh; do
+load() {
+  local p
+  for p in "$HOME/.local/etc/bash/$1"{/*,}/*.sh; do
     [ -f "$p" ] && . "$p"
   done
-  unset p
-done
-unset d
+}
+
+shopt -q login_shell && load profile.d
+
+if [[ $- = *i* ]]; then
+  load bashrc.d
+  unset load
+else
+  unset load
+  return
+fi
 
 shopt -s globstar
-
-export RUBYLIB=/d/dev/repo/ruby-ext
 
 alias s=/d/dev/repo/ssh-helper/ssh.sh
 
