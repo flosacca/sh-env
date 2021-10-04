@@ -21,7 +21,7 @@ vimman() {
 }
 
 pp() {
-  tr : '\n' <<< "$PATH"
+  tr : \\n <<< $PATH
 }
 
 unalias l 2>/dev/null

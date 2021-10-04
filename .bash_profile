@@ -5,7 +5,8 @@ if [ -n "$LOAD_TMUX" ]; then
   fi
 fi
 
-# The default .profile is not loaded if this file presents.
-if [ -f "$HOME/.profile" ]; then
-  . "$HOME/.profile"
+umask 022
+
+if [ -f "$HOME/.bashrc" ]; then
+  . "$HOME/.bashrc"
 fi
