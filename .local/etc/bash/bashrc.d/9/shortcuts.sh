@@ -10,7 +10,7 @@ clh() {
 }
 
 clp() {
-  find . -type d -name __pycache__ | xargs -d'\n' rm -r
+  find . -type d -name __pycache__ -exec rm -r {} +
 }
 
 vimman() {
@@ -29,7 +29,7 @@ unalias ll 2>/dev/null
 
 l() {
   if [ $# -eq 0 ]; then
-    [ -n "$(ls)" ] && ls -ldFh *
+    [ -n "$(ls)" ] && ls -ldFh -- *
   else
     ls -lFh "$@"
   fi
@@ -37,7 +37,7 @@ l() {
 
 ll() {
   if [ $# -eq 0 ]; then
-    [ -n "$(ls)" ] && ls -ldFh * .* || ls -ldFh .*
+    [ -n "$(ls)" ] && ls -ldFh -- * .* || ls -ldFh -- .*
   else
     ls -laFh "$@"
   fi
@@ -53,7 +53,7 @@ gd() {
     if [ $n -eq 0 ]; then
       git diff --cached "$@"
     else
-      git diff "$@" HEAD~$n HEAD~$(($n - 1))
+      git diff HEAD~$n HEAD~$(($n - 1)) "$@"
     fi
   else
     git diff "$@"
