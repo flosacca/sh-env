@@ -17,6 +17,6 @@ fi
 
 shopt -s globstar
 
-alias s=/d/dev/repo/ssh-helper/ssh.sh
-
 alias inspect='ruby -e "p ARGV"'
+
+alias d='cd /d/dev/'
