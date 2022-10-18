@@ -1,4 +1,5 @@
-alias c=clear
+alias grep='grep --color=auto'
+
 alias pc=proxychains4
 
 mkcd() {
@@ -6,7 +7,12 @@ mkcd() {
 }
 
 clh() {
-  history -c && history -w
+  if is_bash; then
+    history -c
+    history -w
+  elif is_zsh; then
+    rm -f "$HISTFILE"
+  fi
 }
 
 clp() {
@@ -24,23 +30,17 @@ pp() {
   tr : \\n <<< $PATH
 }
 
-unalias l 2>/dev/null
-unalias ll 2>/dev/null
+alias ls='ls --color=auto'
 
-l() {
-  if [ $# -eq 0 ]; then
-    [ -n "$(ls)" ] && ls -ldFh -- *
-  else
-    ls -lFh "$@"
-  fi
-}
+alias l='ls_l -Fh'
+alias ll='ls_l -aFh'
 
-ll() {
-  if [ $# -eq 0 ]; then
-    [ -n "$(ls)" ] && ls -ldFh -- * .* || ls -ldFh -- .*
-  else
-    ls -laFh "$@"
+ls_l() {
+  local ls=(ls --quoting-style=shell-escape)
+  if [ -t 1 ]; then
+    ls+=(--color=always)
   fi
+  "${ls[@]}" -l "$@" | grep -v '^total .*[^:]$'
 }
 
 alias gs='git status'
