@@ -1,9 +1,12 @@
-alias grep='grep --color=auto'
+alias d='cd /d/dev/'
+alias inspect='ruby -e "p ARGV"'
 
 alias pc=proxychains4
 
+alias grep='grep --color=auto'
+
 mkcd() {
-  mkdir -p "$@" && cd "$1"
+  mkdir -p -- "$@" && cd -- "$1"
 }
 
 clh() {
@@ -20,14 +23,17 @@ clp() {
 }
 
 vimman() {
-  local id=$(date +%s%3N)
-  local p=/tmp/man.$id.txt
-  man "$@" > $p && vim -R $p
-  rm $p
+  local p="/tmp/man.$(date +%s%3N).txt"
+  man "$@" > "$p" && vim -R "$p"
+  rm "$p"
 }
 
 pp() {
   tr : \\n <<< $PATH
+}
+
+curln() {
+  curl "$@" && echo;
 }
 
 alias ls='ls --color=auto'
@@ -48,12 +54,10 @@ alias gl='git log --oneline -30'
 
 gd() {
   if [[ $1 =~ ^[0-9]{1,3}$ ]]; then
-    local n=$1
-    shift
-    if [ $n -eq 0 ]; then
-      git diff --cached "$@"
+    if [ "$1" = 0 ]; then
+      git diff --cached "${@:2}"
     else
-      git diff HEAD~$n HEAD~$(($n - 1)) "$@"
+      git diff "HEAD~$1" "HEAD~$(($1 - 1))" "${@:2}"
     fi
   else
     git diff "$@"

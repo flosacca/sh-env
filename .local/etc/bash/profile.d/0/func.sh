@@ -17,19 +17,17 @@ csl_cons() {
 }
 
 add_env() {
-  if ! [[ $1 = [LR] && $2 =~ ^[_[:alnum:]]+$ ]]; then
+  if ! [[ ${1-}:${2-} =~ ^[LR]:[a-zA-Z0-9_]+$ ]]; then
     return 1
   fi
-  local a=$1 v=$2
-  shift 2
-  if eval '[[ ${'$v'+.} ]]'; then
-    if [ $a = L ]; then
-      eval 'set -- "$@" "$'$v'"'
-    else
-      eval 'set -- "$'$v'" "$@"'
-    fi
+  local v a
+  eval "v=\${$2-}"
+  if [ "$1" = L ]; then
+    a=("${@:3}" "$v")
+  else
+    a=("$v" "${@:3}")
   fi
-  export "$v=$(csl_cons "$@")"
+  export "$2=$(csl_cons "${a[@]}")"
 }
 
 prepend_path() {

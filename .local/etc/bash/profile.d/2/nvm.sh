@@ -2,9 +2,11 @@
 
 export NVM_DIR="$HOME/.nvm"
 
-v=$(<"$NVM_DIR/alias/default")
+v=default
 while [ -f "$NVM_DIR/alias/$v" ]; do
-  v=$(<"$NVM_DIR/alias/$v")
+  v=$(< "$NVM_DIR/alias/$v")
 done
-prepend_path "$NVM_DIR/versions/node/$v/bin"
+if [ "$v" != default ]; then
+  prepend_path "$NVM_DIR/versions/node/$v/bin"
+fi
 unset v
