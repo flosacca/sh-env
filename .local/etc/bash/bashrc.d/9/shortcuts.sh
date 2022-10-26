@@ -25,7 +25,7 @@ clp() {
 vimman() {
   local p="/tmp/man.$(date +%s%3N).txt"
   man "$@" > "$p" && vim -R "$p"
-  rm "$p"
+  rm -f "$p"
 }
 
 pp() {
@@ -46,7 +46,7 @@ ls_l() {
   if [ -t 1 ]; then
     ls+=(--color=always)
   fi
-  "${ls[@]}" -l "$@" | grep -v '^total .*[^:]$'
+  _pipe_status "'grep' -v '^total .*[^:]$'" "${ls[@]}" -l "$@"
 }
 
 alias gs='git status'
