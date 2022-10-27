@@ -38,15 +38,10 @@ is_login() {
 }
 
 load_dir() {
-  local s p
-  s=$(pwd)
+  local p
   for p in "$base_dir/etc/$1"/*/*.sh; do
-    if [ -f "$p" ]; then
-      cd "$(dirname "$p")"
-      . "$p"
-    fi
+    . "$p"
   done
-  cd "$s"
 }
 
 unset_all() {

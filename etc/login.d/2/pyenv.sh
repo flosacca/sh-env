@@ -1,1 +1,4 @@
-eval "$(sed 's/\<rbenv\>/pyenv/g' rbenv.sh)"
+[ -d ~/.pyenv ] || return
+
+prepend_path ~/.pyenv/bin
+prepend_path ~/.pyenv/shims
