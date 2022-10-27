@@ -1,3 +1,1 @@
-if [ -d "$HOME/.acme.sh" ]; then
-  . "$HOME/.acme.sh/acme.sh.env"
-fi
+load ~/.acme.sh/acme.sh.env

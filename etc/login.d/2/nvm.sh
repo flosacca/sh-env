@@ -1,6 +1,6 @@
-[ -d "$HOME/.nvm" ] || return
+[ -d ~/.nvm ] || return
 
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR=~/.nvm
 
 v=default
 while [ -f "$NVM_DIR/alias/$v" ]; do

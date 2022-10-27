@@ -1,4 +1,4 @@
-[ -d "$HOME/.rbenv" ] || return
+[ -d ~/.rbenv ] || return
 
-prepend_path "$HOME/.rbenv/bin"
-prepend_path "$HOME/.rbenv/shims"
+prepend_path ~/.rbenv/bin
+prepend_path ~/.rbenv/shims

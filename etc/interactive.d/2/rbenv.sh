@@ -1,7 +1,7 @@
 [ -x "$(command -v rbenv)" ] || return
 
-is_bash && . "$HOME/.rbenv/completions/rbenv.bash"
-is_zsh && . "$HOME/.rbenv/completions/rbenv.zsh"
+is_bash && . ~/.rbenv/completions/rbenv.bash
+is_zsh && . ~/.rbenv/completions/rbenv.zsh
 
 rbenv() {
   case ${1-} in
