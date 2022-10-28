@@ -1,6 +1,3 @@
-alias d='cd /d/dev/'
-alias inspect='ruby -e "p ARGV"'
-
 alias pc=proxychains4
 
 alias grep='grep --color=auto'
