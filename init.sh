@@ -46,7 +46,7 @@ load_dir() {
 
 unset_all() {
   unset shell_type base_dir
-  unset -f is_bash is_zsh puts load real_dir set_vars is_login load_dir unset_all
+  unset -f puts load real_dir set_vars is_login load_dir unset_all
 }
 
 set_vars
