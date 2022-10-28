@@ -11,7 +11,7 @@ Clone the repository somewhere and add `. <repo>/init.sh` to your `bashrc` or `z
 - `l` to invoke `ls -lFh`, without the disturbing `total ...:` line
   - also `ll` for additional `-a`
 - `mkcd` to `cd` after `mkdir`
-- `vimman` to open man page in vim
+- `vman` to open man page in vim
 - `pp` to print `$PATH` by line
 - `gd` to invoke `git diff` with ease:
   - `gd 0` for `git diff --cached`

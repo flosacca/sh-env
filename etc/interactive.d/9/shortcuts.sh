@@ -19,7 +19,7 @@ clp() {
   find . -type d -name __pycache__ -exec rm -r {} +
 }
 
-vimman() {
+vman() {
   local p="/tmp/man.$(date +%s%3N).txt"
   man "$@" > "$p" && vim -R "$p"
   rm -f "$p"
