@@ -1,6 +1,7 @@
 alias pc=proxychains4
 
 alias grep='grep --color=auto'
+alias g=grep
 
 mkcd() {
   mkdir -p -- "$@" && cd -- "$1"
@@ -9,7 +10,7 @@ mkcd() {
 clh() {
   if is_bash; then
     history -c
-    history -w
+    rm -f ~/.bash_history
   elif is_zsh; then
     rm -f "$HISTFILE"
   fi
@@ -39,7 +40,7 @@ alias l='ls_l -Fh'
 alias ll='ls_l -aFh'
 
 ls_l() {
-  local ls=(ls --quoting-style=shell-escape)
+  local ls=(ls --quoting-style="${LS_QUOTING_STYLE:-shell-escape}")
   if [ -t 1 ]; then
     ls+=(--color=always)
   fi

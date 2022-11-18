@@ -26,7 +26,7 @@ set_vars() {
     base_dir=$(real_dir "$BASH_SOURCE")
   elif is_zsh; then
     shell_type=zsh
-    base_dir=${${(%):-%x}:A:h}
+    base_dir=${${(%):-%x}:P:h}
   fi
 }
 
