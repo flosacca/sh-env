@@ -8,12 +8,10 @@ mkcd() {
 }
 
 clh() {
-  if is_bash; then
-    history -c
-    rm -f ~/.bash_history
-  elif is_zsh; then
-    rm -f "$HISTFILE"
-  fi
+  case $shell_type in
+    bash) history -c && rm -f ~/.bash_history;;
+    zsh) rm -f "$HISTFILE";;
+  esac
 }
 
 clp() {

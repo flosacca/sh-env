@@ -1,7 +1,6 @@
 [ -x "$(command -v pyenv)" ] || return
 
-is_bash && . ~/.pyenv/completions/pyenv.bash
-is_zsh && . ~/.pyenv/completions/pyenv.zsh
+. ~/.pyenv/completions/pyenv."$shell_type"
 
 pyenv() {
   case ${1-} in

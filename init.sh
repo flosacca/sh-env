@@ -1,13 +1,5 @@
 [ "${BASH_VERSION-}${ZSH_VERSION-}" ] || return
 
-is_bash() {
-  [ "${BASH_VERSION-}" ]
-}
-
-is_zsh() {
-  [ "${ZSH_VERSION-}" ]
-}
-
 load() {
   [ -f "$1" ] && . "$@"
 }
@@ -21,10 +13,10 @@ _real_dir() {
 }
 
 _set_vars() {
-  if is_bash; then
+  if [ "${BASH_VERSION-}" ]; then
     shell_type=bash
     base_dir=$(_real_dir "$BASH_SOURCE")
-  elif is_zsh; then
+  elif [ "${ZSH_VERSION-}" ]; then
     shell_type=zsh
     base_dir=${${(%):-%x}:P:h}
   fi
@@ -40,12 +32,12 @@ _is_login() {
 _load_dir() {
   local p
   for p in "$base_dir/etc/$1"/*/*.sh; do
-    . "$p"
+    . "$p" || :
   done
 }
 
 _unset_all() {
-  unset shell_type base_dir
+  unset base_dir
   unset -f _puts _real_dir _set_vars _is_login _load_dir _unset_all
 }
 
