@@ -15,6 +15,8 @@ g() {
 
 alias grep=g
 
+alias rm='rm --interactive=never'
+
 mkcd() {
   mkdir -p -- "$@" && cd -- "$1"
 }
