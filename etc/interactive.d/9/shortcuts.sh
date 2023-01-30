@@ -1,7 +1,19 @@
-alias pc=proxychains4
+g() {
+  local grep=(grep --color=auto)
+  for arg; do
+    case $arg in
+      --)
+        break;;
+      --*)
+        continue;;
+      -*r*)
+        grep+=(--exclude-dir=.git);;
+    esac
+  done
+  "${grep[@]}" "$@"
+}
 
-alias grep='grep --color=auto'
-alias g=grep
+alias grep=g
 
 mkcd() {
   mkdir -p -- "$@" && cd -- "$1"
@@ -31,6 +43,8 @@ pp() {
 curln() {
   curl "$@" && echo;
 }
+
+alias pc=proxychains4
 
 alias ls='ls --color=auto'
 
