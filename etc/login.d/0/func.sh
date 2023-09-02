@@ -16,7 +16,7 @@ csl_cons() {
   }' "$@"
 }
 
-add_env() {
+env_list_add() {
   if ! [[ ${1-}:${2-} =~ ^[LR]:[a-zA-Z0-9_]+$ ]]; then
     return 1
   fi
@@ -31,9 +31,9 @@ add_env() {
 }
 
 prepend_path() {
-  add_env L PATH "$@"
+  env_list_add L PATH "$@"
 }
 
 append_path() {
-  add_env R PATH "$@"
+  env_list_add R PATH "$@"
 }

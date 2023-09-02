@@ -1,1 +1,1 @@
-unset -f csl_cons add_env prepend_path append_path
+unset -f csl_cons env_list_add prepend_path append_path
