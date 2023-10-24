@@ -53,12 +53,16 @@ alias ls='ls --color=auto'
 alias l='ls_l -Fh'
 alias ll='ls_l -aFh'
 
+_ls_l_filter() {
+  command grep -v '^total .*[^:]$'
+}
+
 ls_l() {
-  local ls=(ls --quoting-style="${LS_QUOTING_STYLE:-shell-escape}")
-  if [ -t 1 ]; then
-    ls+=(--color=always)
-  fi
-  _pipe_status "'grep' -v '^total .*[^:]$'" "${ls[@]}" -l "$@"
+  [ -t 1 ] && set -- --color=always "$@"
+  filter=_ls_l_filter _filter_with_status \
+    ls -l \
+    --quoting-style="${LS_QUOTING_STYLE:-shell-escape}" \
+    "$@"
 }
 
 alias gs='git status'
