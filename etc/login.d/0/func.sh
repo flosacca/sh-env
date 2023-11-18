@@ -1,5 +1,5 @@
-# Construct colon-separated list
-csl_cons() {
+csl() {
+  # colon-separated list
   awk 'BEGIN {
     for (i = 1; i < ARGC; ++i) {
       n = split(ARGV[i], a, ":")
@@ -17,17 +17,21 @@ csl_cons() {
 }
 
 env_list_add() {
-  if ! [[ ${1-}:${2-} =~ ^[LR]:[a-zA-Z0-9_]+$ ]]; then
+  local pos name value
+  pos=${1-}
+  name=${2-}
+  if ! [[ $pos:$name =~ ^[LR]:[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
     return 1
   fi
-  local v a
-  eval "v=\${$2-}"
-  if [ "$1" = L ]; then
-    a=("${@:3}" "$v")
+  shift 2
+  eval "value=\${$name-}"
+  if [ "$pos" = L ]; then
+    set -- "$@" "$value"
   else
-    a=("$v" "${@:3}")
+    set -- "$value" "$@"
   fi
-  export "$2=$(csl_cons "${a[@]}")"
+  value=$(csl "$@")
+  export "$name=$value"
 }
 
 prepend_path() {
