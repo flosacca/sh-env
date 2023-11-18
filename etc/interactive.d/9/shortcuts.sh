@@ -68,16 +68,26 @@ ls_l() {
 alias gs='git status'
 alias gl='git log --oneline -30'
 
+_git_is_commit() {
+  git rev-parse --verify "$1^{commit}" >/dev/null 2>&1
+}
+
 gd() {
+  local n
   if [[ $1 =~ ^[0-9]{1,3}$ ]]; then
-    if [ "$1" = 0 ]; then
-      git diff --cached "${@:2}"
+    n=$1
+    shift
+    if [ "$n" = 0 ]; then
+      set -- --cached "$@"
     else
-      git diff "HEAD~$1" "HEAD~$(($1 - 1))" "${@:2}"
+      if _git_is_commit "$1"; then
+        set -- "$1~$n" "$@"
+      else
+        set -- "HEAD~$n" "HEAD~$((n - 1))" "$@"
+      fi
     fi
-  else
-    git diff "$@"
   fi
+  git diff "$@"
 }
 
 git-sync() {
