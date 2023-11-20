@@ -1,16 +1,13 @@
 g() {
-  local grep=(grep --color=auto)
+  local arg
   for arg; do
     case $arg in
-      --)
-        break;;
-      --*)
-        continue;;
-      -*r*)
-        grep+=(--exclude-dir=.git);;
+      --) break;;
+      --*) ;;
+      -*r*) set -- --exclude-dir=.git "$@";;
     esac
   done
-  "${grep[@]}" "$@"
+  command grep --color=auto "$@"
 }
 
 alias grep=g
@@ -33,13 +30,14 @@ clp() {
 }
 
 vman() {
-  local p="/tmp/man.$(date +%s%3N).txt"
+  local p
+  p=/tmp/man.$(date +%s%3N).txt
   man "$@" > "$p" && vim -R "$p"
   rm -f "$p"
 }
 
 pp() {
-  tr : \\n <<< $PATH
+  tr : \\n <<< "$PATH"
 }
 
 curln() {
@@ -92,7 +90,7 @@ gd() {
 
 git-sync() {
   if [ -z "$(git status --porcelain)" ]; then
-    git reset --hard @{u}
+    git reset --hard '@{u}'
   else
     git status
   fi
