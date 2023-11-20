@@ -1,7 +1,7 @@
 [ "${BASH_VERSION-}${ZSH_VERSION-}" ] || return
 
 load() {
-  [ -f "$1" ] && . "$@"
+  [ -f "$1" ] && . "$1"
 }
 
 _puts() {
