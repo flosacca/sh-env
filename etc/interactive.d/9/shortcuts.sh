@@ -65,6 +65,7 @@ ls_l() {
 
 alias gs='git status'
 alias gl='git log --oneline -30'
+alias gco='git checkout'
 
 _git_is_commit() {
   git rev-parse --verify "$1^{commit}" >/dev/null 2>&1
