@@ -1,11 +1,15 @@
-[ -x "$(command -v rbenv)" ] || return
+command -v rbenv >/dev/null 2>&1 || return 0
 
-. ~/.rbenv/completions/rbenv."$shell_type"
+_load ~/.rbenv/completions/rbenv."$shell_type"
 
 rbenv() {
   case ${1-} in
   shell|rehash)
-    eval "$(command rbenv "sh-$1" "${@:2}")"
+    eval "$(
+      subcmd=sh-$1
+      shift
+      command rbenv "$subcmd" "$@"
+    )"
     ;;
   *)
     command rbenv "$@"

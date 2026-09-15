@@ -1,1 +1,1 @@
-load ~/.acme.sh/acme.sh.env
+_load ~/.acme.sh/acme.sh.env

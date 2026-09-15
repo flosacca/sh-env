@@ -1,51 +1,69 @@
-[ "${BASH_VERSION-}${ZSH_VERSION-}" ] || return
+if [ -n "${BASH_VERSION-}" ]; then
+  shell_type=bash
+elif [ -n "${ZSH_VERSION-}" ]; then
+  shell_type=zsh
+else
+  shell_type=sh
+fi
 
-load() {
-  [ -f "$1" ] && . "$1"
-}
-
-_puts() {
-  printf '%s\n' "$@"
-}
-
-_real_dir() {
-  _puts "$(dirname "$(readlink -f "$1")")"
-}
-
-_set_vars() {
-  if [ "${BASH_VERSION-}" ]; then
-    shell_type=bash
-    base_dir=$(_real_dir "$BASH_SOURCE")
-  elif [ "${ZSH_VERSION-}" ]; then
-    shell_type=zsh
-    base_dir=${${(%):-%x}:P:h}
-  fi
-}
-
-_is_login() {
+if [ -z "${sh_env_dir-}" ]; then
   case $shell_type in
-    bash) shopt -q login_shell;;
-    zsh) [[ -o login ]];;
+    bash)
+      sh_env_dir=$(
+        self=${BASH_SOURCE[0]}
+        if command -v realpath >/dev/null 2>&1; then
+          self=$(realpath -- "$self")
+        elif command -v readlink >/dev/null 2>&1; then
+          self=$(readlink -f -- "$self")
+        fi
+        if command -v dirname >/dev/null 2>&1; then
+          dirname -- "$self"
+        else
+          printf '%s\n' "${self%/*}"
+        fi
+      )
+      ;;
+    zsh)
+      sh_env_dir=${${(%):-%x}:P:h}
+      ;;
+    *)
+      # unable to locate the base directory
+      return 1;;
+  esac
+fi
+
+_login_shell() {
+  case $shell_type in
+    bash)
+      shopt -q login_shell;;
+    zsh)
+      [[ -o login ]];;
+    *)
+      # assume true since only login shell loads profile
+      ;;
   esac
 }
 
-_load_dir() {
-  local p
-  for p in "$base_dir/$1"/*/*.sh; do
-    . "$p" || :
+_load() {
+  for _script; do
+    if [ -r "$_script" ]; then
+      . "$_script"
+    fi
   done
+  unset _script
 }
 
-_unset_all() {
-  unset base_dir
-  unset -f _puts _real_dir _set_vars _is_login _load_dir _unset_all
-}
+if _login_shell; then
+  _load "$sh_env_dir"/login/*/*.sh
+fi
 
-_set_vars
-if _is_login; then
-  _load_dir login
-fi
-if [[ $- = *i* ]]; then
-  _load_dir interactive
-fi
-_unset_all
+case $- in (*i*)
+  _load "$sh_env_dir"/interactive/*/*.sh
+esac
+
+unset -f _login_shell _load
+
+unset sh_env_dir
+
+# "$shell_type" is not unset
+# unset shell_type

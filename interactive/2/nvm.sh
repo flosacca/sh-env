@@ -1,4 +1,4 @@
-[ -n "$NVM_DIR" ] || return
+[ -n "$NVM_DIR" ] || return 0
 
 nvm() {
   unset -f nvm
@@ -6,4 +6,7 @@ nvm() {
   nvm "$@"
 }
 
-. "$NVM_DIR/bash_completion"
+case $shell_type in
+  bash|zsh)
+    . "$NVM_DIR/bash_completion";;
+esac

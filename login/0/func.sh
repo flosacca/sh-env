@@ -1,5 +1,4 @@
-csl() {
-  # colon-separated list
+colon_list() {
   awk 'BEGIN {
     for (i = 1; i < ARGC; ++i) {
       n = split(ARGV[i], a, ":")
@@ -16,28 +15,12 @@ csl() {
   }' "$@"
 }
 
-env_list_add() {
-  local pos name value
-  pos=${1-}
-  name=${2-}
-  if ! [[ $pos:$name =~ ^[LR]:[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-    return 1
-  fi
-  shift 2
-  eval "value=\${$name-}"
-  if [ "$pos" = L ]; then
-    set -- "$@" "$value"
-  else
-    set -- "$value" "$@"
-  fi
-  value=$(csl "$@")
-  export "$name=$value"
-}
-
 prepend_path() {
-  env_list_add L PATH "$@"
+  PATH=$(colon_list "$@" "$PATH")
+  export PATH
 }
 
 append_path() {
-  env_list_add R PATH "$@"
+  PATH=$(colon_list "$PATH" "$@")
+  export PATH
 }

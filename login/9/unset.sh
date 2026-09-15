@@ -1,1 +1,1 @@
-unset -f csl env_list_add prepend_path append_path
+unset -f colon_list prepend_path append_path

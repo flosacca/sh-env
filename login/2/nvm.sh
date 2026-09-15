@@ -1,12 +1,17 @@
-[ -d ~/.nvm ] || return
+[ -d ~/.nvm ] || return 0
 
-export NVM_DIR=~/.nvm
+NVM_DIR=~/.nvm
 
-v=default
-while [ -f "$NVM_DIR/alias/$v" ]; do
-  v=$(< "$NVM_DIR/alias/$v")
+# The original initialization line does this exporting, though I do not think
+# it is really necessary, as nvm is a shell function that is executed in the
+# current shell context.
+export NVM_DIR
+
+_ref=default
+while [ -f "$NVM_DIR/alias/$_ref" ]; do
+  _ref=$(cat "$NVM_DIR/alias/$_ref")
 done
-if [ "$v" != default ]; then
-  prepend_path "$NVM_DIR/versions/node/$v/bin"
+if [ "$_ref" != default ]; then
+  prepend_path "$NVM_DIR/versions/node/$_ref/bin"
 fi
-unset v
+unset _ref
