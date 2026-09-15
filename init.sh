@@ -31,7 +31,7 @@ _is_login() {
 
 _load_dir() {
   local p
-  for p in "$base_dir/etc/$1"/*/*.sh; do
+  for p in "$base_dir/$1"/*/*.sh; do
     . "$p" || :
   done
 }
@@ -43,9 +43,9 @@ _unset_all() {
 
 _set_vars
 if _is_login; then
-  _load_dir login.d
+  _load_dir login
 fi
 if [[ $- = *i* ]]; then
-  _load_dir interactive.d
+  _load_dir interactive
 fi
 _unset_all
