@@ -1,24 +1,57 @@
 # sh-env
 
-General settings for bash or zsh.
+General settings for bash, zsh or POSIX shells.
 
 ## Usage
 
-Clone the repository somewhere and add `. <repo>/init.sh` to your `bashrc` or `zshrc`.
+Clone the repository somewhere and source the `init.sh` in a proper startup file.
 
-## Features
+For example, run
+```
+git clone https://github.com/flosacca/sh-env ~/.local/share/sh-env
+```
+and put this line into `~/.bashrc`
+```
+. ~/.local/share/sh-env/init.sh
+```
 
-- `l` to invoke `ls -lFh`, without the disturbing `total ...:` line
-  - also `ll` for additional `-a`
-- `mkcd` to `cd` after `mkdir`
-- `vman` to open man page in vim
+### Related concepts and details
+
+Roughly speaking, the first shell for a specific user is usually a login shell, while subsequent subshells are not.
+For interactive use, the first shell is an interactive login shell, and subsequent shells are interactive non-login shells.
+
+Shells usually have two types of startup files: `*profile` (or `*login`) is for login shells, regardless of whether they are interactive or not. `*rc` is for interactive shells.
+These are two distinct ideas that lie behind this. The user environment should be set up once on login, which is what "login" means, with the user's "profile". In the other hand, there may be some commands you'd like to always run before your interactive use. These commands are put in "rc", which literally means "run commands".
+
+Where things go complicated is that, interactive login shells may not load `*rc`. POSIX shells don't even have a "rc" file. They only look up for `/etc/profile` and `~/.profile` for login shells. Bash has `/etc/bash.bashrc` and `~/.bashrc`, but only loads them for interactive *non-login* (or remote-login) shells. To make bash also load `bashrc`s for interactive login shells, the `profile`s usually contain some code that sources `bashrc`s when run interactively. In contrast, zsh *does* load `~/.zshrc` for interactive login shells.
+
+The way I recommend is that:
+- for bash, create a `~/.bash_profile` that contains only the line `. ~/.bashrc`, and put all stuffs into `~/.bashrc`. Perform the login check inside `bashrc`.
+- for zsh, simply do anything within `~/.zshrc`.
+
+Particularly for this repository, put the setup line in `~/.bashrc` or `~/.zshrc`. It runs the corresponding login parts and interactive parts on itself.
+
+For POSIX shells, the setup has to however be modified to:
+```sh
+# ~/.profile
+sh_env_dir=~/.local/share/sh-env  # or a custom location
+. "$sh_env_dir/init.sh"
+```
+The repository directory has to be stored explicitly into a variable, or the script has no way to determine where it reside. Also, POSIX shells won't load the startup files for interactive non-login shells.
+
+## Shortcuts
+
+- `l` for `ls -lFh`, without the disturbing `total ...:` line. also, `ll` adds `-a`
+- `g` for `grep --exclude-dir=.git`
+- `mkcd` for `cd` after `mkdir`
 - `pp` to print `$PATH` by line
-- `gd` to invoke `git diff` with ease:
-  - `gd 0` for `git diff --cached`
-  - `gd <n>` for `git diff HEAD~<n> HEAD~<n-1>`
-  - normal `git diff` otherwise
+- `vman` to open a man page in Vim
+- `lt[n]` for `tree -L [n] -I .git -C | less -R`. `lt` is `lt2`
 - `gs` for `git status`
 - `gl` for `git log --oneline -30`
-- `$PATH` exporting without duplication even if sourced twice
-- `rbenv` and `pyenv` support if available
-- `nvm` support with on-demand initialization, while default `node` always usable
+
+## Other features
+
+- it sets up `$PATH` without duplication of paths even when sourced twice
+- load `rbenv` and `pyenv` if available
+- load `nvm` with on-demand initialization, while the default `node` always usable
