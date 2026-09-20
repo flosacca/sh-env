@@ -1,7 +1,5 @@
 export EDITOR=vim
 
-export LESSHISTFILE=-
-
 # Export LS_COLORS from the builtin database of dircolors(1).
 # $LS_COLORS customizes the colors used by ls(1) and allows to set colors
 # according to file extensions. The default output of dircolors identifies
