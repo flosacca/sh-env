@@ -39,7 +39,12 @@ sh_env_dir=~/.local/share/sh-env  # or a custom location
 ```
 The repository directory has to be stored explicitly into a variable, or the script has no way to determine where it reside. Also, POSIX shells won't load the startup files for interactive non-login shells.
 
-## Shortcuts
+### Design
+
+`init.sh` sources `login/*/*.sh` if run as a login shell, and then sources `interactive/*/*.sh` if run interactively. These scripts are sourced in the order of the expanded glob, which should follow the apparent order when the names contain exactly one leading digit.
+You may put any additional scripts in these locations to make them to be sourced on the startup, and you may put non-portable code into script files whose names start with an underscore, as `_*.sh` is `gitignore`d.
+
+## Defined shortcuts
 
 - `l` for `ls -lFh`, without the disturbing `total ...:` line. also, `ll` adds `-a`
 - `g` for `grep --exclude-dir=.git`
@@ -52,6 +57,14 @@ The repository directory has to be stored explicitly into a variable, or the scr
 
 ## Other features
 
-- it sets up `$PATH` without duplication of paths even when sourced twice
-- load `rbenv` and `pyenv` if available
-- load `nvm` with on-demand initialization, while the default `node` always usable
+The entries in `$PATH` is always deduplicated when any path is added. It won't contain any duplication even if the startup files are sourced more than once.
+
+It sets up a configuration file for the less pager if there isn't one. Setting `$LESSKEY` or `$LESSKEYIN` (even with an empty value) prevents this behavior.
+
+It detects some version managers and sets them up automatically, as the setup lines they would add in the startup files. The supported version managers are:
+- rbenv
+- pyenv
+- nvm
+- cargo
+
+Among above, nvm is designed as a heavy shell function, which is too slow to be loaded on every startup. In contrast, we load the main shell function on demand, but find the default `node` and set up `$PATH` in advance to make `node` usable regardless of nvm's state.
