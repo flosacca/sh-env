@@ -34,21 +34,23 @@ vman() {
     # of ".man".
     tmpfile=/tmp/$(date +%s%3N 2>/dev/null || mktemp -u XXXXXXXX).man
 
+    columns=${MANWIDTH:-$(command -v tput >/dev/null 2>&1 && tput cols)}
+    columns=${columns:-${COLUMNS-}}
+
     # Assume the columns used by the line number is at most 6. With the
     # default 'numberwidth' in Vim, this happens when the count of lines is
     # between 1 and 99999.
-    columns=$(expr "${MANWIDTH:-$(tput cols)}" - 6)
+    columns=${columns:+$(expr "$columns" - 6)}
 
     # man(1) leaves extra spaces by passing certain options to groff with a
     # line length slightly smaller than the configured or detected width, i.e.
     # $MANWIDTH, $COLUMNS or the width from the terminal. The exact line
     # length was computed in an unobvious way, which has also changed across
     # versions.
-    # These groff options are added with the exact demand to override the
-    # options added by man(1).
-    # These options are specific to groff. The case where nroff is not groff
-    # is not considered.
-    groff_opts="-rLL=${columns}n -rLT=${columns}n"
+    # The following groff options are added with the exact demand to override
+    # the options added by man(1). These options are specific to groff and the
+    # case where nroff is not groff is not considered.
+    groff_opts=${columns:+-rLL=${columns}n -rLT=${columns}n}
 
     # There may be errors reported to stderr, which is suppressed by default
     # when a pager is used.
