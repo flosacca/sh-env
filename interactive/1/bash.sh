@@ -1,10 +1,23 @@
 [ "$shell_type" = bash ] || return 0
 
-# The prompt shows the working directory and a prompt character.
-PS1='\[\e[1;34m\]\w\[\e[m\]\$ '
-if [ -n "${SSH_CLIENT-}" ]; then
-  PS1='\[\e[1;32m\]\u@\h\[\e[m\]:'$PS1
-fi
+case ${PS1-} in
+  *'#'*)
+    # Someone has detected elevated privileges and set the prompt char in PS1.
+    # Preserve that prompt char.
+    _prompt_char='#';;
+  *)
+    # Let bash determine the prompt char.
+    _prompt_char='\$';;
+esac
+
+# In the basic case, show only the working directory and a prompt char.
+PS1='\[\e[1;34m\]\w\[\e[m\]'$_prompt_char' '
+
+# Show also user@hostname in a remote shell.
+PS1=${SSH_CLIENT:+'\[\e[1;32m\]\u@\h\[\e[m\]:'}$PS1
+
+# Indicate MSYS environment.
+PS1=${MSYSTEM:+'\[\e[1;35m\][$MSYSTEM]\[\e[m\] '}$PS1
 
 # Turn off the vulnerable history expansion.
 set +o histexpand
