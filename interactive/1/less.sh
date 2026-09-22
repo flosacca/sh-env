@@ -1,13 +1,13 @@
-# Customize less(1) if it exists and is not already configured.
+# Stop less from generating ~/.lesshst
+export LESSHISTFILE=-
+
+# Create a configuration file for less if there is not already one.
 if [ -z "${LESSKEY+x}" ] &&
     [ -z "${LESSKEYIN+x}" ] &&
     [ ! -e ~/.less ] &&
     [ ! -e ~/.lesskey ] &&
     command -v less >/dev/null 2>&1
   then
-  # Stop less from writing ~/.lesshst
-  export LESSHISTFILE=-
-
   # The tilde expansion is performed under variable assignments while not
   # inside double quotes.
   _config_home=${XDG_CONFIG_HOME:-~/.config}
