@@ -6,7 +6,8 @@ else
   shell_type=sh
 fi
 
-if [ -z "${sh_env_dir-}" ]; then
+sh_env_dir=${SH_ENV_DIR-}
+if [ -z "$sh_env_dir" ]; then
   case $shell_type in
     bash)
       sh_env_dir=$(

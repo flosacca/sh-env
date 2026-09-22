@@ -34,8 +34,8 @@ Particularly for this repository, put the setup line in `~/.bashrc` or `~/.zshrc
 For POSIX shells, the setup has to however be modified to:
 ```sh
 # ~/.profile
-sh_env_dir=~/.local/share/sh-env  # or a custom location
-. "$sh_env_dir/init.sh"
+SH_ENV_DIR=~/.local/share/sh-env  # or a custom location
+. "$SH_ENV_DIR/init.sh"
 ```
 The repository directory has to be stored explicitly into a variable, or the script has no way to determine where it reside. Also, POSIX shells won't load the startup files for interactive non-login shells.
 
