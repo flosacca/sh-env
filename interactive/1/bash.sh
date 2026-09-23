@@ -27,12 +27,11 @@ set +o histexpand
 set +o hashall
 
 # extglob enables regex-like glob patterns. bash-completion sets this option
-# and relies on it to work, so I have to keep it though I do not want it.
+# and heavily relies on it, so I have to keep it though I do not want it.
 # shopt -u extglob
 
-# Report error on empty globbing, as zsh does. It guards against unintended
-# filename expansions.
-shopt -s failglob
+# Unfortunately, setting failglob also breaks some parts of bash-completion.
+# shopt -s failglob
 
 # Make the pattern "**" match file entries under recursive subdirectories. It
 # cannot match a partial file entry, that is, "**.sh" does not work while
