@@ -52,16 +52,23 @@ vman() {
     # case where nroff is not groff is not considered.
     groff_opts=${columns:+-rLL=${columns}n -rLT=${columns}n}
 
-    # There may be errors reported to stderr, which is suppressed by default
-    # when a pager is used.
-    MANROFFOPT="$groff_opts" man "$@" > "$tmpfile" && {
-      # Use `-R` for setting read-only mode. It is deliberately chosen over
-      # unsetting 'modifiable' as `-M` does to allow any temporary editing.
+    # man(1) may report errors to stderr, which are however by default
+    # suppressed when a pager is used.
+    if MANROFFOPT="$groff_opts" man "$@" > "$tmpfile"; then
+      # `vim -R` sets read-only mode, which is deliberately chosen over
+      # unsetting 'modifiable' as `vim -M` does, to allow any temporary
+      # editing.
       vim -R "$tmpfile"
+      status=$?  # exit status of vim
+    else
+      status=$?  # exit status of man
+    fi
 
-      # The temporary file should be deleted even when Vim stops on SIGTSTP.
-      rm -f "$tmpfile"
-    }
+    # Always clean up the temporary file.
+    rm -f "$tmpfile"
+
+    # Exit the subshell with the status of the effective last command.
+    exit "$status"
   )
 }
 
@@ -70,10 +77,9 @@ vinfo() {
   # I am not willing to adapt to the Info reader, so let me stay in Vim.
   (
     tmpfile=/tmp/info-$(date +%s%3N 2>/dev/null || mktemp -u XXXXXXXX).txt
-    info --subnodes "$@" > "$tmpfile" && {
-      vim -R "$tmpfile"
-      rm -f "$tmpfile"
-    }
+    info --subnodes "$@" > "$tmpfile"
+    [ -s "$tmpfile" ] && vim -R "$tmpfile"
+    rm -f "$tmpfile"
   )
 }
 
