@@ -59,16 +59,16 @@ vman() {
       # unsetting 'modifiable' as `vim -M` does, to allow any temporary
       # editing.
       vim -R "$tmpfile"
-      status=$?  # exit status of vim
+      _status=$?  # exit status of vim
     else
-      status=$?  # exit status of man
+      _status=$?  # exit status of man
     fi
 
     # Always clean up the temporary file.
     rm -f "$tmpfile"
 
     # Exit the subshell with the status of the effective last command.
-    exit "$status"
+    exit "$_status"
   )
 }
 
