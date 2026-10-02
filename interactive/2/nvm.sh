@@ -1,4 +1,4 @@
-[ -n "$NVM_DIR" ] || return 0
+[ -n "${NVM_DIR-}" ] || return 0
 
 nvm() {
   unset -f nvm
