@@ -15,6 +15,14 @@ and put this line into `~/.bashrc`
 . ~/.local/share/sh-env/init.sh
 ```
 
+If the original startup files don't have to be kept, you can also use symlinks directly
+```
+cd
+ln -s .local/share/sh-env/init.sh .bashrc
+ln -s .bashrc .bash_profile
+```
+and additional stuffs can be put into `sh-env/{interactive,login}/*/_*.sh`. See below.
+
 ### Related concepts and details
 
 Roughly speaking, the first shell for a specific user is usually a login shell, while subsequent subshells are not.
@@ -25,8 +33,8 @@ These are two distinct ideas that lie behind this. The user environment should b
 
 Where things go complicated is that, interactive login shells may not load `*rc`. POSIX shells don't even have a "rc" file. They only look up for `/etc/profile` and `~/.profile` for login shells. Bash has `/etc/bash.bashrc` and `~/.bashrc`, but only loads them for interactive *non-login* (or remote-login) shells. To make bash also load `bashrc`s for interactive login shells, the `profile`s usually contain some code that sources `bashrc`s when run interactively. In contrast, zsh *does* load `~/.zshrc` for interactive login shells.
 
-The way I recommend is that:
-- for bash, create a `~/.bash_profile` that contains only the line `. ~/.bashrc`, and put all stuffs into `~/.bashrc`. Perform the login check inside `bashrc`.
+What I would recommend is:
+- for bash, make `~/.bash_profile` a symlink that points to `~/.bashrc`, and put all stuffs into `~/.bashrc`. Perform the login check inside `bashrc`.
 - for zsh, simply do anything within `~/.zshrc`.
 
 Particularly for this repository, put the setup line in `~/.bashrc` or `~/.zshrc`. It runs the corresponding login parts and interactive parts on itself.
@@ -48,12 +56,15 @@ You may put any additional scripts in these locations to make them to be sourced
 
 - `l` for `ls -lFh`, without the disturbing `total ...:` line. also, `ll` adds `-a`
 - `g` for `grep --exclude-dir=.git`
-- `mkcd` for `cd` after `mkdir`
+- `mkcd` for `cd` after `mkdir -p`
 - `pp` to print `$PATH` by line
 - `vman` to open a man page in Vim
 - `lt[n]` for `tree -L [n] -I .git -C | less -R`. `lt` is `lt2`
-- `gs` for `git status`
-- `gl` for `git log --oneline -30`
+- git aliases
+  - `gs` for `git status`
+  - `gl` for `git log --oneline -30`
+  - `gco` for `git checkout`
+  - `gp` for `git log -p -1 --oneline`
 
 ## Other features
 
