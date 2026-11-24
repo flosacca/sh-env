@@ -147,7 +147,7 @@ gd() {
   # This is simliar to `git log -p -1 COMMIT~<N-1>`, which is already
   # abbreviated to `gp` in the above. However, `gd` is by default relative to
   # HEAD and also works when there is not yet a commit.
-  if awk 'BEGIN { exit ARGV[1] !~ /^[0-9]{1,3}$/ }' "${1-}"; then
+  case ${1-} in ([0-9]|[0-9][0-9]|[0-9][0-9][0-9])
     _num=$1
     shift
     if [ "$_num" = 0 ]; then
@@ -160,6 +160,6 @@ gd() {
       fi
     fi
     unset _num
-  fi
+  esac
   git diff "$@"
 }
